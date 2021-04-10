@@ -104,27 +104,41 @@ def back_up(dircmpp):
             print("copying {} from {} to {} ".format(name, dircmpp.left, dircmpp.right))
             shutil.copyfile(dircmpp.left + "/{}".format(name), dircmpp.right + "/{}".format(name))
         
-        except:
+        except Exception as err:
+            print(err + "\n")
             
-            print(" trying copying {} from {} to {} ".format(name, dircmpp.left, dircmpp.right))
-            pathleft = win32api.GetShortPathName(dircmpp.left)
-            pathright = win32api.GetShortPathName(dircmpp.right)
-            shutil.copyfile(pathleft + "/{}".format(name), pathright + "/{}".format(name))
+            # print(" trying copying {} from {} to {} ".format(name, dircmpp.left, dircmpp.right))
+            # pathleft = win32api.GetShortPathName(dircmpp.left)
+            # pathright = win32api.GetShortPathName(dircmpp.right)
+            # shutil.copyfile(pathleft + "/{}".format(name), pathright + "/{}".format(name))
+            continue
                               
     for name in dircmpp.left_only:
-        
-        if os.path.isdir(dircmpp.left+"/{}".format(name)):
             
-            print("copying tree" , "{}{} \n".format(dircmpp.right,name))
-            shutil.copytree("{}/{}".format(dircmpp.left, name), "{}/{}".format(dircmpp.right,name))
-        else:           
-            try:                
-                shutil.copyfile(dircmpp.left+"/{}".format(name), dircmpp.right+"/{}".format(name))           
-            except Exception as e :
+            if os.path.isdir(dircmpp.left+"/{}".format(name)):
                 
-                print(e)
-                print("failed copying {} IN {}".format(name,dircmpp.left))
-                continue
+                 try:
+                
+                    print("copying tree " , "{}{} \n".format(dircmpp.right,name))
+                    shutil.copytree("{}/{}".format(dircmpp.left, name), "{}/{}".format(dircmpp.right,name))
+                    
+                 except Exception as e :
+            
+                
+                    print(e ,"\n")
+                    print("failed copying {} IN {}".format(name,dircmpp.left))
+                    
+            else:
+                try:
+                            
+                    shutil.copyfile(dircmpp.left+"/{}".format(name), dircmpp.right+"/{}".format(name)) 
+                    print("copying file"+ dircmpp.left + "{}".format(name))
+                    
+                except Exception as e :
+                            
+                    print(e ,"\n")
+                    print("failed copying {} IN {}".format(name,dircmpp.left))
+                    
                 
     for name in dircmpp.subdirs.values():
         #print(name.left, " -- " , name.right)
