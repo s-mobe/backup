@@ -28,7 +28,7 @@ def loading(func):
 
     """
     def wrapper(*args, **kwargs):
-        p.start(5)
+        p.start(10)
         func(*args, **kwargs)
         p.stop()
     return wrapper
@@ -99,8 +99,20 @@ def make_ob(source,dest):
 @loading
 def back_up(dircmpp):
     
-
+    """
+    Parameters
+    ----------
+    dircmpp : TYPE : filecmp.dircmp object
     
+    the function first checks for different files and copies from source(left) to right(destination)
+    if the file is a direcotry it copies the whole tree ( directory)
+    
+    Returns
+    -------
+    recursive calls to every subdirectory to check the whole directories and sub directories
+
+    """
+        
     for name in dircmpp.diff_files:       
         try:
 
@@ -114,7 +126,6 @@ def back_up(dircmpp):
             # pathleft = win32api.GetShortPathName(dircmpp.left)
             # pathright = win32api.GetShortPathName(dircmpp.right)
             # shutil.copyfile(pathleft + "/{}".format(name), pathright + "/{}".format(name))
-            continue
                               
     for name in dircmpp.left_only:
             
@@ -126,8 +137,7 @@ def back_up(dircmpp):
                     shutil.copytree("{}/{}".format(dircmpp.left, name), "{}/{}".format(dircmpp.right,name))
                     
                  except Exception as e :
-            
-                
+                            
                     print(e, "\n")
                     print("failed copying {} IN {} \n".format(name,dircmpp.left))
                     
@@ -141,8 +151,7 @@ def back_up(dircmpp):
                             
                     print(e, "\n")
                     print("failed copying {} IN {} \n".format(name,dircmpp.left))
-                    
-                
+                                    
     for name in dircmpp.subdirs.values():
         #print(name.left, " -- " , name.right)
         newdir = filecmp.dircmp(name.left,name.right)
