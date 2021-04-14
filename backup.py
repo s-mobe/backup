@@ -7,12 +7,13 @@ Created on Sun Apr  4 14:34:51 2021
 
 import tkinter
 import os
-import sys
+# import sys
 import filecmp
 import shutil
-import win32api
+# import win32api
 from tkinter import filedialog, ttk
 import threading
+
 
 
 def loading(func):
@@ -98,6 +99,8 @@ def make_ob(source,dest):
 @loading
 def back_up(dircmpp):
     
+
+    
     for name in dircmpp.diff_files:       
         try:
 
@@ -105,7 +108,7 @@ def back_up(dircmpp):
             shutil.copyfile(dircmpp.left + "/{}".format(name), dircmpp.right + "/{}".format(name))
         
         except Exception as err:
-            print(err + "\n")
+            print(err)
             
             # print(" trying copying {} from {} to {} ".format(name, dircmpp.left, dircmpp.right))
             # pathleft = win32api.GetShortPathName(dircmpp.left)
@@ -119,31 +122,32 @@ def back_up(dircmpp):
                 
                  try:
                 
-                    print("copying tree " , "{}{} \n".format(dircmpp.right,name))
+                    print("copying tree " , "{} {} \n".format(dircmpp.right,name))
                     shutil.copytree("{}/{}".format(dircmpp.left, name), "{}/{}".format(dircmpp.right,name))
                     
                  except Exception as e :
             
                 
-                    print(e ,"\n")
-                    print("failed copying {} IN {}".format(name,dircmpp.left))
+                    print(e, "\n")
+                    print("failed copying {} IN {} \n".format(name,dircmpp.left))
                     
             else:
                 try:
                             
                     shutil.copyfile(dircmpp.left+"/{}".format(name), dircmpp.right+"/{}".format(name)) 
-                    print("copying file"+ dircmpp.left + "{}".format(name))
+                    print("copying file"+ dircmpp.left + "/{} \n".format(name))
                     
                 except Exception as e :
                             
-                    print(e ,"\n")
-                    print("failed copying {} IN {}".format(name,dircmpp.left))
+                    print(e, "\n")
+                    print("failed copying {} IN {} \n".format(name,dircmpp.left))
                     
                 
     for name in dircmpp.subdirs.values():
         #print(name.left, " -- " , name.right)
         newdir = filecmp.dircmp(name.left,name.right)
         back_up(newdir)
+        
     
 def selectpath():
     """
